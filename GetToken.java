@@ -11,12 +11,11 @@ import org.json.simple.parser.ParseException;
 import org.json.simple.parser.JSONParser;
 
 public class GetToken {
-	     public static String token_resp;
-	 	 public String get_token() {
+	         public static String token_resp;
+	 	 public static String get_token() {
 
 		  try {
-
-			URL url = new URL("http://sevdemo.sevone.com/api/v1/authentication/signin");
+                        URL url = new URL("http://19.19.19.111:80/api/v1/authentication/signin");
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
 			conn.setRequestMethod("POST");
@@ -26,15 +25,14 @@ public class GetToken {
 	"           \"name\": \"admin\",\n" +
 	"           \"password\": \"SevOne\"\n" +
 	"}";
-	        System.out.println(input);
+          	 //     System.out.println(input);
 			OutputStream os = conn.getOutputStream();
 			os.write(input.getBytes());
 			os.flush();
 			String inputLine;
-			JSONParser parser    = new JSONParser();
-	        BufferedReader in    = new BufferedReader(new InputStreamReader(conn.getInputStream()));            
+	                BufferedReader in  = new BufferedReader(new InputStreamReader(conn.getInputStream()));            
 			while ((inputLine = in.readLine()) != null) {
-				
+				JSONParser parser    = new JSONParser();
 				JSONObject token_obj = (JSONObject) parser.parse(inputLine);
 				token_resp = (String) token_obj.get("token");
 				}
@@ -48,5 +46,5 @@ public class GetToken {
 	        
 		 return token_resp; 
 	 }
-	 	
-}
+}	 	
+
