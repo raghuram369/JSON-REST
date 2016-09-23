@@ -1,0 +1,22 @@
+Steps to run demo from lab :
+
+ssh sevone@63.64.73.142 
+password : !SevOne@vz.com!
+
+If we doing it for static logs, 
+1)copy a few messages containing TCA and TC_PATH_CHG from /var/log/syslog  to /home/sevone/syslog/ .
+
+2)cd vinod/demo 
+The final jar for demo is available there . 
+
+3)source ~/.bashrc 
+4)Run the jar . 
+
+The output by default is printed to the console , change it to file if needed just by redirecting it using > symbol .
+
+
+Note : If we are doing it for live messages , then we need not write any messages to /home/sevone/syslog (i.e; step 1 is not needed)
+Simply run java POpen (present in the same directory as the final jar i.e; vinod/demo) in one console , and in other console run the jar . 
+
+We can see a print on the console when a relevant message occurs , and in the background these messages are copied to a file and this 
+file is taken by our program .
