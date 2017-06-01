@@ -1,0 +1,125 @@
+instructions for traffic testing on POD VMs:
+
+==========
+
+# POD VM & networks
+
+Connect (SSH) into a POD VM using the following hostname & login credentials
+
+- Hostname / IP address
+   + On any VMs in the lab use the host name to connect any POD VM: e.g.
+       * Testbed 1, POD-A1: tb1-pod-a1
+       * Testbed 2, POD-B2: tb2-pod-b2
+   + Full list of POD VMs and its testbed management IP address information is available at the bottom.
+
+- User ID / password
+   + User ID: testu
+   + Password: sdnwan397
+
+On the POD VM, run the following command to see the list of networks available:
+
+       testu@tb1-pod-b1 ~> ip netns
+       net3
+       net2
+       net1
+
+You can go into one of the networks using the following command:
+
+       testu@tb1-pod-b1 ~> sudo goto_net net1
+
+Shell prompt shows the current network as well as the VM hostname: 
+
+       testu@tb1-pod-b1:net1 ~> 
+
+Run the following command to check the information of the current network.
+
+- IP address information (IPv4 & IPv6)
+
+           testu@tb1-pod-b1:net1 ~> ip addr
+
+- Routing for IPv4:
+
+           testu@tb1-pod-b1:net1 ~> ip route
+
+- Routing for IPv6:
+
+           testu@tb1-pod-b1:net1 ~> ip -6 route
+
+Use 'exit' to come back to the normal network namespace.
+
+# Traffic tests
+
+In one of the network you can do reachability testing using ping: e.g.
+
+- Ping tb1-pod-b2 net1 from tb1-pod-b1 net1 (IPv4):
+
+       testu@tb1-pod-b1:net1 ~> ping 100.21.32.2
+
+- Ping tb1-pod-b2 net1 from tb1-pod-b1 net1 (IPv6):
+
+       testu@tb1-pod-b1:net1 ~> ping6 2001:4888:0:1200::2
+
+To do iperf testing, two SSH sessions are required. For example, to send traffic from tb1-pod-b1 net1 to tb1-pod-b2 net1:
+
+- Go to tb1-pod-b2 net1, and run iperf server:
+
+       testu@tb1-pod-b2:net1 ~> iperf3 -s
+
+- Go to tb1-pod-b1 net1, and run iperf client:
+
+       testu@tb1-pod-b1:net1 ~> iperf3 -c 100.21.32.2
+
+iperf general options
+
+       -p, --port n
+             set server port to listen on/connect to to n (default 5201)
+       -i, --interval n
+           pause n seconds between periodic bandwidth reports
+
+iperf options for server
+
+       -s, --server
+           run in server mode
+       -D, --daemon
+          run the server in background as a daemon
+
+iperf options for client
+
+       -c, --client host
+           run in client mode, connecting to the specified server
+       -u, --udp
+           use UDP rather than TCP
+       -b, --bandwidth n[KM]
+           set target bandwidth to n bits/sec (default 1 Mbit/sec for UDP, unlimited for TCP).
+       -t, --time n
+           time in seconds to transmit for (default 10 secs)
+       -n, --bytes n[KM]
+           number of bytes to transmit (instead of -t)
+       -P, --parallel n
+           number of parallel client streams to run
+
+For more details, check the manual page (man iperf3).
+
+---
+
+# POD VMs on data-plane servers
+
+10.100.16.51        tb1-pod-a1.sdn-vz.net       tb1-pod-a1
+10.100.16.52        tb1-pod-a2.sdn-vz.net       tb1-pod-a2
+10.100.16.53        tb1-pod-a3.sdn-vz.net       tb1-pod-a3
+10.100.16.54        tb2-pod-a1.sdn-vz.net       tb2-pod-a1
+10.100.16.55        tb2-pod-a2.sdn-vz.net       tb2-pod-a2
+10.100.16.56        tb2-pod-a3.sdn-vz.net       tb2-pod-a3
+
+10.100.16.57        tb1-pod-b1.sdn-vz.net       tb1-pod-b1
+10.100.16.58        tb1-pod-b2.sdn-vz.net       tb1-pod-b2
+10.100.16.59        tb2-pod-b1.sdn-vz.net       tb2-pod-b1
+10.100.16.60        tb2-pod-b2.sdn-vz.net       tb2-pod-b2
+
+10.100.16.61        tb1-pod-c1x.sdn-vz.net      tb1-pod-c1x
+10.100.16.62        tb1-pod-c1y.sdn-vz.net      tb1-pod-c1y
+10.100.16.63        tb1-pod-c2x.sdn-vz.net      tb1-pod-c2x
+10.100.16.64        tb1-pod-c2y.sdn-vz.net      tb1-pod-c2y
+10.100.16.65        tb1-pod-c3x.sdn-vz.net      tb1-pod-c3x
+10.100.16.66        tb1-pod-c3y.sdn-vz.net      tb1-pod-c3y
+
