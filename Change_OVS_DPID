@@ -1,0 +1,2 @@
+ovs-vsctl set bridge br-int other_config:datapath-id=0000125870fd784d
+ovs-vsctl set bridge br-int other_config:datapath-id=00004ea533324642
